@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AllFlavor Parlor — Simplex Optimizer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF6E3;
+    --vanilla: #F5E6C8;
+    --chocolate: #3D1F0D;
+    --caramel: #C8832A;
+    --mint: #2A7A5A;
+    --strawberry: #C0392B;
+    --sky: #E8F4FD;
+    --ink: #1A0A00;
+    --shadow: rgba(61,31,13,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(ellipse at 10% 20%, rgba(200,131,42,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(42,122,90,0.06) 0%, transparent 50%);
+  }
+
+  header {
+    background: var(--chocolate);
+    color: var(--cream);
+    padding: 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '🍦';
+    position: absolute;
+    font-size: 8rem;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.15;
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--caramel);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  header h1 em { color: var(--caramel); font-style: italic; }
+  header p { font-size: 0.95rem; opacity: 0.75; font-weight: 300; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--chocolate);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-title span { font-size: 1.1rem; }
+  .divider { border: none; border-top: 2px solid var(--vanilla); margin: 2rem 0; }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border: 1px solid var(--vanilla);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+
+  /* PRICES TABLE */
+  .price-table { width: 100%; border-collapse: collapse; font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem; }
+  .price-table th {
+    background: var(--chocolate);
+    color: var(--cream);
+    padding: 0.6rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .price-table th:first-child { text-align: left; border-radius: 6px 0 0 0; }
+  .price-table th:last-child { border-radius: 0 6px 0 0; }
+  .price-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--vanilla);
+    text-align: center;
+  }
+  .price-table td:first-child { text-align: left; font-weight: 600; color: var(--chocolate); }
+  .price-table tr:hover td { background: var(--sky); }
+  .price-table .best { color: var(--mint); font-weight: 700; }
+  .price-table .worst { color: var(--strawberry); }
+
+  /* FORMULATION */
+  .formula-block {
+    background: var(--chocolate);
+    color: var(--cream);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+  .formula-block .obj { color: #FFD580; font-size: 0.9rem; font-weight: 600; }
+  .formula-block .comment { color: #8BA888; }
+  .formula-block .highlight { color: #F5A623; }
+
+  /* CONSTRAINTS */
+  .constraint-list { list-style: none; }
+  .constraint-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed var(--vanilla);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+  }
+  .c-tag {
+    background: var(--caramel);
+    color: white;
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-top: 0.05rem;
+  }
+  .c-tag.green { background: var(--mint); }
+  .c-tag.red { background: var(--strawberry); }
+
+  /* SOLUTION TABLE */
+  .sol-table { width: 100%; border-collapse: collapse; }
+  .sol-table th {
+    background: var(--mint);
+    color: white;
+    padding: 0.65rem 1rem;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+  .sol-table td {
+    padding: 0.65rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--vanilla);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+  }
+  .sol-table tr:nth-child(even) td { background: rgba(42,122,90,0.04); }
+  .sol-table .month-label { text-align: left; font-weight: 600; color: var(--chocolate); }
+  .sol-table .nonzero { color: var(--mint); font-weight: 700; }
+  .sol-table .zero { color: #bbb; }
+
+  /* COST BREAKDOWN */
+  .cost-bar-wrap { margin: 0.5rem 0 1rem; }
+  .cost-label { display: flex; justify-content: space-between; font-size: 0.83rem; margin-bottom: 0.3rem; }
+  .cost-label strong { font-family: 'IBM Plex Mono', monospace; }
+  .cost-bar-bg { background: var(--vanilla); border-radius: 4px; height: 10px; }
+  .cost-bar-fill { height: 10px; border-radius: 4px; transition: width 0.8s ease; }
+
+  /* TOTAL COST DISPLAY */
+  .total-cost {
+    background: linear-gradient(135deg, var(--chocolate), #6B3A1F);
+    color: white;
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 6px 24px rgba(61,31,13,0.3);
+  }
+  .total-cost .label { font-size: 0.85rem; opacity: 0.75; font-weight: 300; margin-bottom: 0.3rem; }
+  .total-cost .amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    color: #FFD580;
+    letter-spacing: -0.02em;
+  }
+  .total-cost .emoji { font-size: 3rem; opacity: 0.6; }
+
+  /* INVENTORY */
+  .inv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .inv-card {
+    border: 2px solid var(--vanilla);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    text-align: center;
+  }
+  .inv-card .month { font-size: 0.75rem; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .inv-card .qty { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--caramel); }
+  .inv-card .unit { font-size: 0.75rem; color: #888; }
+
+  /* ITERATION TABLE */
+  .iter-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+  .iter-table th {
+    background: #2A3A4A;
+    color: #E0E8F0;
+    padding: 0.45rem 0.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+  .iter-table td {
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid #E8EDF2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-align: right;
+  }
+  .iter-table .var-col { text-align: left; font-weight: 600; color: var(--chocolate); }
+  .iter-table .pivot { background: rgba(200,131,42,0.15); font-weight: 700; color: var(--caramel); }
+  .iter-table .optimal { background: rgba(42,122,90,0.08); }
+
+  /* TABS */
+  .tab-bar { display: flex; gap: 0; margin-bottom: 1.25rem; border-bottom: 2px solid var(--vanilla); }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: 0.6rem 1.2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { color: var(--chocolate); border-bottom-color: var(--caramel); font-weight: 600; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* RESPONSIVE */
+  @media (max-width: 680px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .inv-grid { grid-template-columns: 1fr 1fr; }
+    header h1 { font-size: 1.7rem; }
+    .total-cost .amount { font-size: 2rem; }
+  }
+
+  /* ANIMATE */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+  .card { animation: fadeUp 0.45s ease both; }
+  .card:nth-child(2) { animation-delay: 0.08s; }
+  .card:nth-child(3) { animation-delay: 0.16s; }
+  .card:nth-child(4) { animation-delay: 0.24s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Investigación de Operaciones · Método Simplex</div>
+  <h1>AllFlavor Parlor<br><em>Programa Óptimo de Compra</em></h1>
+  <p>Minimización de costos de adquisición y refrigeración de helado — Verano</p>
+</header>
+
+<main>
+
+  <!-- DATOS DEL PROBLEMA -->
+  <div class="section-title" style="margin-top:1.75rem;">
+    <span>📋</span> Datos del Problema
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div style="font-weight:600;color:var(--chocolate);margin-bottom:0.75rem;font-size:0.95rem;">Tabla de Precios ($/cartón)</div>
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>Proveedor</th>
+            <th>Junio</th>
+            <th>Julio</th>
+            <th>Agosto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prov. 1</td>
+            <td class="best">$100</td>
+            <td class="worst">$110</td>
+            <td class="worst">$120</td>
+          </tr>
+          <tr>
+            <td>Prov. 2</td>
+            <td class="worst">$115</td>
+            <td class="best">$108</td>
+            <td class="worst">$125</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:0.72rem;color:#888;margin-top:0.5rem;">
+        <span style="color:var(--mint);font-weight:700;">Verde</span> = precio más bajo del mes &nbsp;·&nbsp;
+        <span style="color:var(--strawberry);">Rojo</span> = precio más alto
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:600;color:var(--chocolate);margin-bottom:0.75rem;font-size:0.95rem;">Parámetros del Sistema</div>
+      <ul style="list-style:none;font-size:0.88rem;line-height:2;">
+        <li>📦 Demanda junio: <strong>500</strong> cartones</li>
+        <li>📦 Demanda julio: <strong>600</strong> cartones</li>
+        <li>📦 Demanda agosto: <strong>400</strong> cartones</li>
+        <li>🔢 Capacidad por proveedor/mes: <strong>400</strong> cartones</li>
+        <li>❄️ Costo refrigeración: <strong>$5</strong>/cartón·mes (promedio)</li>
+        <li>🏪 Proveedores: <strong>2</strong> (sabores intercambiables)</li>
+        <li>📊 Total cartones demandados: <strong>1,500</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FORMULACIÓN -->
+  <div class="section-title"><span>📐</span> Formulación del Modelo Simplex</div>
+
+  <div class="card">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('variables')">Variables</button>
+      <button class="tab-btn" onclick="showTab('objetivo')">Función Objetivo</button>
+      <button class="tab-btn" onclick="showTab('restricciones')">Restricciones</button>
+      <button class="tab-btn" onclick="showTab('inventario')">Inventario</button>
+    </div>
+
+    <div id="tab-variables" class="tab-content active">
+      <div style="font-size:0.88rem;line-height:2;">
+        <p style="margin-bottom:0.75rem;color:#555;">Se definen las siguientes variables de decisión, donde el primer subíndice indica el proveedor y el segundo el mes:</p>
+        <table style="border-collapse:collapse;width:100%;">
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);width:80px;">x₁₁</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Junio</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₁</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Junio</strong></td>
+          </tr>
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₁₂</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Julio</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₂</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Julio</strong></td>
+          </tr>
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₁₃</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Agosto</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₃</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Agosto</strong></td>
+          </tr>
+          <tr style="background:#FFF3CD;">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">I₁</td>
+            <td style="padding:0.4rem 1rem;">Inventario sobrante al final de <strong>Junio</strong> (cartones refrigerados)</td>
+          </tr>
+          <tr style="background:#FFF3CD;">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">I₂</td>
+            <td style="padding:0.4rem 1rem;">Inventario sobrante al final de <strong>Julio</strong> (cartones refrigerados)</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-objetivo" class="tab-content">
+      <div style="font-size:0.88rem;line-height:1.9;color:#333;">
+        <p style="margin-bottom:1rem;">Se desea <strong>minimizar el costo total</strong>, que incluye los costos de compra a ambos proveedores más el costo de refrigeración del inventario almacenado:</p>
+
+        <div style="background:var(--vanilla);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1rem;">
+          <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.5rem;">Min Z =</div>
+          <div style="padding-left:1rem;line-height:2.2;">
+            <div><span style="color:var(--caramel);font-weight:600;">Junio:</span> &nbsp;&nbsp;100 x₁₁ + 115 x₂₁</div>
+            <div><span style="color:var(--mint);font-weight:600;">Julio:</span> &nbsp;&nbsp;&nbsp;+ 110 x₁₂ + 108 x₂₂</div>
+            <div><span style="color:#6B4FBB;font-weight:600;">Agosto:</span> &nbsp;+ 120 x₁₃ + 125 x₂₃</div>
+            <div style="border-top:1px dashed #ccc;margin-top:0.4rem;padding-top:0.4rem;">
+              <span style="color:#C0392B;font-weight:600;">Refrig.:</span> &nbsp;+ 5 I₁ + 5 I₂
+            </div>
+          </div>
+        </div>
+        <p style="font-size:0.82rem;color:#666;">El costo de refrigeración se calcula sobre el inventario <em>promedio</em> disponible durante el mes. Como el inventario entra al inicio y sale al final, el promedio equivale a I₁ e I₂ directamente multiplicados por $5.</p>
+      </div>
+    </div>
+
+    <div id="tab-restricciones" class="tab-content">
+      <ul class="constraint-list">
+        <li><span class="c-tag">DEM-JUN</span> x₁₁ + x₂₁ &nbsp;≥ 500 &nbsp;&nbsp;<span style="color:#888">Demanda mínima de junio</span></li>
+        <li><span class="c-tag">DEM-JUL</span> x₁₁ + x₂₁ + x₁₂ + x₂₂ &nbsp;≥ 1 100 &nbsp;&nbsp;<span style="color:#888">Demanda acumulada a julio</span></li>
+        <li><span class="c-tag">DEM-AGO</span> x₁₁ + x₂₁ + x₁₂ + x₂₂ + x₁₃ + x₂₃ &nbsp;= 1 500 &nbsp;&nbsp;<span style="color:#888">Total demanda del verano</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Junio</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Junio</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Julio</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Julio</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Agosto</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Agosto</span></li>
+        <li><span class="c-tag red">N.N.</span> Todas las variables ≥ 0</li>
+      </ul>
+    </div>
+
+    <div id="tab-inventario" class="tab-content">
+      <div style="font-size:0.88rem;line-height:1.9;color:#333;">
+        <p style="margin-bottom:1rem;">El inventario de cada mes resulta de lo comprado más lo que quedó del mes anterior, menos la demanda del mes:</p>
+
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Junio</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₁ = (x₁₁ + x₂₁) − 500 &nbsp;≥ 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Lo comprado en junio menos la demanda de junio. Si es positivo, queda inventario refrigerado.</div>
+          </div>
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Julio</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₂ = I₁ + (x₁₂ + x₂₂) − 600 &nbsp;≥ 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Inventario arrastrado de junio, más lo comprado en julio, menos la demanda de julio.</div>
+          </div>
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Agosto</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₂ + (x₁₃ + x₂₃) − 400 = 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Todo el inventario se consume al final del verano; no se permite stock residual.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOLUCIÓN ÓPTIMA -->
+  <div class="section-title"><span>✅</span> Solución Óptima</div>
+
+  <div class="card">
+    <div style="font-size:0.8rem;color:#888;margin-bottom:1rem;">
+      Obtenida mediante el Método Simplex (equivalente a Solver/TORA). Análisis de costos marginales determina el programa de compra más económico.
+    </div>
+
+    <table class="sol-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;">Mes</th>
+          <th>Prov. 1 (cartones)</th>
+          <th>Prov. 2 (cartones)</th>
+          <th>Total comprado</th>
+          <th>Demanda</th>
+          <th>Inventario final</th>
+          <th>Costo compra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="month-label">☀️ Junio</td>
+          <td class="nonzero">400</td>
+          <td class="nonzero">100</td>
+          <td class="nonzero">500</td>
+          <td>500</td>
+          <td class="zero">I₁ = 0</td>
+          <td>$51,500</td>
+        </tr>
+        <tr>
+          <td class="month-label">🌤 Julio</td>
+          <td class="nonzero">400</td>
+          <td class="nonzero">400</td>
+          <td class="nonzero">800</td>
+          <td>600</td>
+          <td class="nonzero">I₂ = 200</td>
+          <td>$87,200</td>
+        </tr>
+        <tr>
+          <td class="month-label">🏖 Agosto</td>
+          <td class="nonzero">200</td>
+          <td class="zero">0</td>
+          <td class="nonzero">200</td>
+          <td>400</td>
+          <td class="zero">0</td>
+          <td>$24,000</td>
+        </tr>
+        <tr style="background:var(--sky);font-weight:700;">
+          <td class="month-label">∑ Total</td>
+          <td>1,000</td>
+          <td>500</td>
+          <td>1,500</td>
+          <td>1,500</td>
+          <td>—</td>
+          <td>$162,700</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.72rem;color:#888;margin-top:0.4rem;">Balance: Junio compra 500 = demanda → I₁=0. Julio compra 800, cubre demanda 600 → I₂=200. Agosto: 200 inv. + 200 compra = 400 demanda ✓</p>
+  </div>
+
+  <!-- INVENTARIO Y COSTO TOTAL -->
+  <div class="card-grid">
+    <div class="card">
+      <div style="font-weight:600;color:var(--chocolate);margin-bottom:1rem;">❄️ Inventario Almacenado</div>
+      <div class="inv-grid">
+        <div class="inv-card">
+          <div class="month">Fin de Junio</div>
+          <div class="qty">0</div>
+          <div class="unit">cartones (I₁)</div>
+        </div>
+        <div class="inv-card">
+          <div class="month">Fin de Julio</div>
+          <div class="qty">200</div>
+          <div class="unit">cartones (I₂)</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem;font-size:0.82rem;">
+        <div class="cost-bar-wrap">
+          <div class="cost-label">
+            <span>Costo refrigeración julio (I₁=0)</span>
+            <strong>$0</strong>
+          </div>
+          <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:0%;background:var(--caramel);"></div></div>
+        </div>
+        <div class="cost-bar-wrap">
+          <div class="cost-label">
+            <span>Costo refrigeración agosto (200 cart.)</span>
+            <strong>$1,000</strong>
+          </div>
+          <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:50%;background:var(--caramel);"></div></div>
+        </div>
+        <div style="font-size:0.78rem;color:#888;margin-top:0.5rem;">
+          200 cartones × $5/mes (almacenados en agosto) = <strong>$1,000</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="font-weight:600;color:var(--chocolate);">💰 Desglose del Costo Total</div>
+      <div class="cost-bar-wrap">
+        <div class="cost-label"><span>Junio — 400×$100 + 100×$115</span><strong>$51,500</strong></div>
+        <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:63%;background:#C8832A;"></div></div>
+      </div>
+      <div class="cost-bar-wrap">
+        <div class="cost-label"><span>Julio — 400×$110 + 400×$108</span><strong>$87,200</strong></div>
+        <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:100%;background:#2A7A5A;"></div></div>
+      </div>
+      <div class="cost-bar-wrap">
+        <div class="cost-label"><span>Agosto — 200×$120</span><strong>$24,000</strong></div>
+        <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:28%;background:#6B4FBB;"></div></div>
+      </div>
+      <div class="cost-bar-wrap">
+        <div class="cost-label"><span>Refrigeración — 200 cart. × $5</span><strong>$1,000</strong></div>
+        <div class="cost-bar-bg"><div class="cost-bar-fill" style="width:1%;background:#C0392B;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COSTO TOTAL -->
+  <div class="total-cost">
+    <div>
+      <div class="label">COSTO TOTAL MÍNIMO ÓPTIMO</div>
+      <div class="amount">$163,700</div>
+      <div style="font-size:0.8rem;opacity:0.6;margin-top:0.3rem;">$162,700 compra + $1,000 refrigeración</div>
+    </div>
+    <div class="emoji">🍦</div>
+  </div>
+
+  <!-- ANÁLISIS DE LA SOLUCIÓN -->
+  <hr class="divider">
+  <div class="section-title"><span>🔍</span> Análisis e Interpretación</div>
+
+  <div class="card">
+    <div style="font-weight:600;color:var(--chocolate);margin-bottom:1rem;">¿Por qué esta solución es óptima?</div>
+    <div style="font-size:0.88rem;line-height:1.9;color:#333;">
+      <p style="margin-bottom:0.8rem;">
+        <strong style="color:var(--caramel);">Junio:</strong> Se compra exactamente la demanda: máximo del Proveedor 1 (400 a $100) y solo 100 del Proveedor 2 (a $115). Total = 500 = demanda → <strong>I₁ = 0</strong>. No conviene guardar desde junio porque el Prov. 2 en julio baja a $108, más barato que $115+$5=$120 de refrigerar desde junio.
+      </p>
+      <p style="margin-bottom:0.8rem;">
+        <strong style="color:var(--caramel);">Julio:</strong> Ambos proveedores al máximo: 400×$110 + 400×$108 = 800 cartones. Demanda = 600 → <strong>I₂ = 200</strong>. Costo efectivo de esos 200 almacenados: $108 + $5 = <strong>$113/cartón</strong> para usar en agosto.
+      </p>
+      <p style="margin-bottom:0.8rem;">
+        <strong style="color:var(--caramel);">Agosto:</strong> Con I₂=200 disponible, solo se compran 200 cartones al Proveedor 1 (el más barato a $120). Total cubierto: 200 + 200 = 400 = demanda ✓
+      </p>
+      <p>
+        <strong style="color:var(--mint);">¿Por qué guardar en julio y no en junio?</strong> Guardar desde junio (P2) costaría $115+$5=$120 efectivo → igual que comprar en agosto. Guardar desde julio (P2) cuesta $108+$5=<strong>$113</strong> → $7 más barato por cartón = <strong>$1,400 de ahorro</strong> sobre los 200 cartones.
+      </p>
+    </div>
+  </div>
+
+  <!-- VERIFICACIÓN -->
+  <div class="card" style="border-left:4px solid var(--mint);">
+    <div style="font-weight:600;color:var(--mint);margin-bottom:0.75rem;">✓ Verificación de Restricciones</div>
+    <table style="width:100%;font-size:0.82rem;font-family:'IBM Plex Mono',monospace;border-collapse:collapse;">
+      <tr style="background:var(--sky);">
+        <td style="padding:0.4rem 0.75rem;font-weight:700;">Restricción</td>
+        <td style="padding:0.4rem;text-align:center;">Valor</td>
+        <td style="padding:0.4rem;text-align:center;">Límite</td>
+        <td style="padding:0.4rem;text-align:center;">Estado</td>
+      </tr>
+      <tr><td style="padding:0.35rem 0.75rem;">x₁₁ ≤ 400</td><td style="text-align:center;">400</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--caramel);">⚡ Activa</td></tr>
+      <tr style="background:var(--sky);"><td style="padding:0.35rem 0.75rem;">x₂₁ ≤ 400</td><td style="text-align:center;">100</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--mint);">✓ Holgura</td></tr>
+      <tr><td style="padding:0.35rem 0.75rem;">x₁₂ ≤ 400</td><td style="text-align:center;">400</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--caramel);">⚡ Activa</td></tr>
+      <tr style="background:var(--sky);"><td style="padding:0.35rem 0.75rem;">x₂₂ ≤ 400</td><td style="text-align:center;">400</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--caramel);">⚡ Activa</td></tr>
+      <tr><td style="padding:0.35rem 0.75rem;">x₁₃ ≤ 400</td><td style="text-align:center;">200</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--mint);">✓ Holgura</td></tr>
+      <tr style="background:var(--sky);"><td style="padding:0.35rem 0.75rem;">x₂₃ ≤ 400</td><td style="text-align:center;">0</td><td style="text-align:center;">400</td><td style="text-align:center;color:var(--mint);">✓ Holgura</td></tr>
+      <tr><td style="padding:0.35rem 0.75rem;">Dem. Jun: x₁₁+x₂₁ = 500</td><td style="text-align:center;">500</td><td style="text-align:center;">500</td><td style="text-align:center;color:var(--caramel);">⚡ Exacta</td></tr>
+      <tr style="background:var(--sky);"><td style="padding:0.35rem 0.75rem;">Dem. Jul: acum. ≥ 1100</td><td style="text-align:center;">1300</td><td style="text-align:center;">≥1100</td><td style="text-align:center;color:var(--mint);">✓ I₂=200</td></tr>
+      <tr><td style="padding:0.35rem 0.75rem;">Total comprado = 1500</td><td style="text-align:center;">1500</td><td style="text-align:center;">1500</td><td style="text-align:center;color:var(--caramel);">⚡ Exacta</td></tr>
+    </table>
+  </div>
+
+</main>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.cost-bar-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = target; }, 100);
+  });
+}, 300);
+</script>
+</body>
+</html>
