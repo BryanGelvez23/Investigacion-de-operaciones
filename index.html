@@ -17,9 +17,9 @@
     --ink: #1A0A00;
     --shadow: rgba(61,31,13,0.12);
   }
-
+ 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
   body {
     background: var(--cream);
     color: var(--ink);
@@ -29,7 +29,7 @@
       radial-gradient(ellipse at 10% 20%, rgba(200,131,42,0.08) 0%, transparent 50%),
       radial-gradient(ellipse at 90% 80%, rgba(42,122,90,0.06) 0%, transparent 50%);
   }
-
+ 
   header {
     background: var(--chocolate);
     color: var(--cream);
@@ -66,9 +66,9 @@
   }
   header h1 em { color: var(--caramel); font-style: italic; }
   header p { font-size: 0.95rem; opacity: 0.75; font-weight: 300; }
-
+ 
   main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
+ 
   /* SECTION HEADERS */
   .section-title {
     font-family: 'DM Serif Display', serif;
@@ -81,7 +81,7 @@
   }
   .section-title span { font-size: 1.1rem; }
   .divider { border: none; border-top: 2px solid var(--vanilla); margin: 2rem 0; }
-
+ 
   /* CARDS */
   .card {
     background: white;
@@ -92,7 +92,7 @@
     margin-bottom: 1.5rem;
   }
   .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
-
+ 
   /* PRICES TABLE */
   .price-table { width: 100%; border-collapse: collapse; font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem; }
   .price-table th {
@@ -114,7 +114,7 @@
   .price-table tr:hover td { background: var(--sky); }
   .price-table .best { color: var(--mint); font-weight: 700; }
   .price-table .worst { color: var(--strawberry); }
-
+ 
   /* FORMULATION */
   .formula-block {
     background: var(--chocolate);
@@ -130,7 +130,7 @@
   .formula-block .obj { color: #FFD580; font-size: 0.9rem; font-weight: 600; }
   .formula-block .comment { color: #8BA888; }
   .formula-block .highlight { color: #F5A623; }
-
+ 
   /* CONSTRAINTS */
   .constraint-list { list-style: none; }
   .constraint-list li {
@@ -154,7 +154,7 @@
   }
   .c-tag.green { background: var(--mint); }
   .c-tag.red { background: var(--strawberry); }
-
+ 
   /* SOLUTION TABLE */
   .sol-table { width: 100%; border-collapse: collapse; }
   .sol-table th {
@@ -177,14 +177,14 @@
   .sol-table .month-label { text-align: left; font-weight: 600; color: var(--chocolate); }
   .sol-table .nonzero { color: var(--mint); font-weight: 700; }
   .sol-table .zero { color: #bbb; }
-
+ 
   /* COST BREAKDOWN */
   .cost-bar-wrap { margin: 0.5rem 0 1rem; }
   .cost-label { display: flex; justify-content: space-between; font-size: 0.83rem; margin-bottom: 0.3rem; }
   .cost-label strong { font-family: 'IBM Plex Mono', monospace; }
   .cost-bar-bg { background: var(--vanilla); border-radius: 4px; height: 10px; }
   .cost-bar-fill { height: 10px; border-radius: 4px; transition: width 0.8s ease; }
-
+ 
   /* TOTAL COST DISPLAY */
   .total-cost {
     background: linear-gradient(135deg, var(--chocolate), #6B3A1F);
@@ -204,7 +204,7 @@
     letter-spacing: -0.02em;
   }
   .total-cost .emoji { font-size: 3rem; opacity: 0.6; }
-
+ 
   /* INVENTORY */
   .inv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
   .inv-card {
@@ -216,7 +216,7 @@
   .inv-card .month { font-size: 0.75rem; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
   .inv-card .qty { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--caramel); }
   .inv-card .unit { font-size: 0.75rem; color: #888; }
-
+ 
   /* ITERATION TABLE */
   .iter-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
   .iter-table th {
@@ -237,7 +237,7 @@
   .iter-table .var-col { text-align: left; font-weight: 600; color: var(--chocolate); }
   .iter-table .pivot { background: rgba(200,131,42,0.15); font-weight: 700; color: var(--caramel); }
   .iter-table .optimal { background: rgba(42,122,90,0.08); }
-
+ 
   /* TABS */
   .tab-bar { display: flex; gap: 0; margin-bottom: 1.25rem; border-bottom: 2px solid var(--vanilla); }
   .tab-btn {
@@ -256,7 +256,7 @@
   .tab-btn.active { color: var(--chocolate); border-bottom-color: var(--caramel); font-weight: 600; }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
-
+ 
   /* RESPONSIVE */
   @media (max-width: 680px) {
     .card-grid { grid-template-columns: 1fr; }
@@ -264,7 +264,7 @@
     header h1 { font-size: 1.7rem; }
     .total-cost .amount { font-size: 2rem; }
   }
-
+ 
   /* ANIMATE */
   @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
   .card { animation: fadeUp 0.45s ease both; }
@@ -274,20 +274,20 @@
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="badge">Investigación de Operaciones · Método Simplex</div>
   <h1>AllFlavor Parlor<br><em>Programa Óptimo de Compra</em></h1>
   <p>Minimización de costos de adquisición y refrigeración de helado — Verano</p>
 </header>
-
+ 
 <main>
-
+ 
   <!-- DATOS DEL PROBLEMA -->
   <div class="section-title" style="margin-top:1.75rem;">
     <span>📋</span> Datos del Problema
   </div>
-
+ 
   <div class="card-grid">
     <div class="card">
       <div style="font-weight:600;color:var(--chocolate);margin-bottom:0.75rem;font-size:0.95rem;">Tabla de Precios ($/cartón)</div>
@@ -333,10 +333,10 @@
       </ul>
     </div>
   </div>
-
+ 
   <!-- FORMULACIÓN -->
   <div class="section-title"><span>📐</span> Formulación del Modelo Simplex</div>
-
+ 
   <div class="card">
     <div class="tab-bar">
       <button class="tab-btn active" onclick="showTab('variables')">Variables</button>
@@ -344,95 +344,114 @@
       <button class="tab-btn" onclick="showTab('restricciones')">Restricciones</button>
       <button class="tab-btn" onclick="showTab('inventario')">Inventario</button>
     </div>
-
+ 
     <div id="tab-variables" class="tab-content active">
-      <div class="formula-block">
-<span class="comment">// Variables de decisión — compras a cada proveedor</span>
-x₁₁ = cartones comprados a Proveedor 1 en <span class="highlight">Junio</span>
-x₂₁ = cartones comprados a Proveedor 2 en <span class="highlight">Junio</span>
-x₁₂ = cartones comprados a Proveedor 1 en <span class="highlight">Julio</span>
-x₂₂ = cartones comprados a Proveedor 2 en <span class="highlight">Julio</span>
-x₁₃ = cartones comprados a Proveedor 1 en <span class="highlight">Agosto</span>
-x₂₃ = cartones comprados a Proveedor 2 en <span class="highlight">Agosto</span>
-
-<span class="comment">// Variables de inventario (al final de cada mes)</span>
-I₁  = inventario sobrante al final de <span class="highlight">Junio</span>
-I₂  = inventario sobrante al final de <span class="highlight">Julio</span>
+      <div style="font-size:0.88rem;line-height:2;">
+        <p style="margin-bottom:0.75rem;color:#555;">Se definen las siguientes variables de decisión, donde el primer subíndice indica el proveedor y el segundo el mes:</p>
+        <table style="border-collapse:collapse;width:100%;">
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);width:80px;">x₁₁</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Junio</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₁</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Junio</strong></td>
+          </tr>
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₁₂</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Julio</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₂</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Julio</strong></td>
+          </tr>
+          <tr style="background:var(--vanilla);">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₁₃</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 1</strong> en <strong>Agosto</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">x₂₃</td>
+            <td style="padding:0.4rem 1rem;">Cartones comprados al <strong>Proveedor 2</strong> en <strong>Agosto</strong></td>
+          </tr>
+          <tr style="background:#FFF3CD;">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">I₁</td>
+            <td style="padding:0.4rem 1rem;">Inventario sobrante al final de <strong>Junio</strong> (cartones refrigerados)</td>
+          </tr>
+          <tr style="background:#FFF3CD;">
+            <td style="padding:0.4rem 1rem;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--chocolate);">I₂</td>
+            <td style="padding:0.4rem 1rem;">Inventario sobrante al final de <strong>Julio</strong> (cartones refrigerados)</td>
+          </tr>
+        </table>
       </div>
     </div>
-
+ 
     <div id="tab-objetivo" class="tab-content">
-      <div class="formula-block">
-<span class="comment">// Minimizar: Costo total de compra + Costo de refrigeración</span>
-<span class="obj">Min Z =</span>
-
-  <span class="comment">/* Junio */</span>
-  100·x₁₁ + 115·x₂₁
-
-  <span class="comment">/* Julio */</span>
-+ 110·x₁₂ + 108·x₂₂
-
-  <span class="comment">/* Agosto */</span>
-+ 120·x₁₃ + 125·x₂₃
-
-  <span class="comment">/* Refrigeración (inventario promedio × $5) */</span>
-+ 5 · [(x₁₁+x₂₁+x₁₂+x₂₂ - 500)/2]   <span class="comment">← I₁ promedio en julio</span>
-+ 5 · [(I₁+x₁₂+x₂₂+x₁₃+x₂₃ - 600)/2] <span class="comment">← I₂ promedio en agosto</span>
-
-<span class="comment">// Simplificando con I₁ e I₂:</span>
-<span class="obj">Min Z =</span> 100x₁₁ + 115x₂₁ + 112.5x₁₂ + 110.5x₂₂
-       + 122.5x₁₃ + 127.5x₂₃
+      <div style="font-size:0.88rem;line-height:1.9;color:#333;">
+        <p style="margin-bottom:1rem;">Se desea <strong>minimizar el costo total</strong>, que incluye los costos de compra a ambos proveedores más el costo de refrigeración del inventario almacenado:</p>
+ 
+        <div style="background:var(--vanilla);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1rem;">
+          <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.5rem;">Min Z =</div>
+          <div style="padding-left:1rem;line-height:2.2;">
+            <div><span style="color:var(--caramel);font-weight:600;">Junio:</span> &nbsp;&nbsp;100 x₁₁ + 115 x₂₁</div>
+            <div><span style="color:var(--mint);font-weight:600;">Julio:</span> &nbsp;&nbsp;&nbsp;+ 110 x₁₂ + 108 x₂₂</div>
+            <div><span style="color:#6B4FBB;font-weight:600;">Agosto:</span> &nbsp;+ 120 x₁₃ + 125 x₂₃</div>
+            <div style="border-top:1px dashed #ccc;margin-top:0.4rem;padding-top:0.4rem;">
+              <span style="color:#C0392B;font-weight:600;">Refrig.:</span> &nbsp;+ 5 I₁ + 5 I₂
+            </div>
+          </div>
+        </div>
+        <p style="font-size:0.82rem;color:#666;">El costo de refrigeración se calcula sobre el inventario <em>promedio</em> disponible durante el mes. Como el inventario entra al inicio y sale al final, el promedio equivale a I₁ e I₂ directamente multiplicados por $5.</p>
       </div>
-      <p style="font-size:0.8rem;color:#666;margin-top:0.5rem;">
-        💡 Los coeficientes ajustados integran el costo de refrigeración. Por ejemplo, comprar en junio para usar en julio cuesta 100 + 5 = $105 (Prov. 1) vs comprar en julio directamente a $110 (Prov. 1) → <strong>conviene comprar en junio</strong>.
-      </p>
     </div>
-
+ 
     <div id="tab-restricciones" class="tab-content">
       <ul class="constraint-list">
-        <li><span class="c-tag">DEM-JUN</span> x₁₁ + x₂₁ ≥ 500 &nbsp;&nbsp;<span style="color:#888">// Demanda mínima junio</span></li>
-        <li><span class="c-tag">DEM-JUL</span> x₁₁ + x₂₁ + x₁₂ + x₂₂ ≥ 1100 &nbsp;&nbsp;<span style="color:#888">// Demanda acumulada a julio</span></li>
-        <li><span class="c-tag">DEM-AGO</span> x₁₁+x₂₁+x₁₂+x₂₂+x₁₃+x₂₃ = 1500 &nbsp;&nbsp;<span style="color:#888">// Total demanda verano</span></li>
-        <li><span class="c-tag green">CAP-1J</span> x₁₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.1, Junio</span></li>
-        <li><span class="c-tag green">CAP-2J</span> x₂₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.2, Junio</span></li>
-        <li><span class="c-tag green">CAP-1L</span> x₁₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.1, Julio</span></li>
-        <li><span class="c-tag green">CAP-2L</span> x₂₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.2, Julio</span></li>
-        <li><span class="c-tag green">CAP-1A</span> x₁₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.1, Agosto</span></li>
-        <li><span class="c-tag green">CAP-2A</span> x₂₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">// Capacidad Prov.2, Agosto</span></li>
-        <li><span class="c-tag red">NN</span> Todas las variables ≥ 0</li>
+        <li><span class="c-tag">DEM-JUN</span> x₁₁ + x₂₁ &nbsp;≥ 500 &nbsp;&nbsp;<span style="color:#888">Demanda mínima de junio</span></li>
+        <li><span class="c-tag">DEM-JUL</span> x₁₁ + x₂₁ + x₁₂ + x₂₂ &nbsp;≥ 1 100 &nbsp;&nbsp;<span style="color:#888">Demanda acumulada a julio</span></li>
+        <li><span class="c-tag">DEM-AGO</span> x₁₁ + x₂₁ + x₁₂ + x₂₂ + x₁₃ + x₂₃ &nbsp;= 1 500 &nbsp;&nbsp;<span style="color:#888">Total demanda del verano</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Junio</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₁ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Junio</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Julio</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₂ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Julio</span></li>
+        <li><span class="c-tag green">CAP</span> x₁₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 1, Agosto</span></li>
+        <li><span class="c-tag green">CAP</span> x₂₃ ≤ 400 &nbsp;&nbsp;<span style="color:#888">Capacidad Proveedor 2, Agosto</span></li>
+        <li><span class="c-tag red">N.N.</span> Todas las variables ≥ 0</li>
       </ul>
     </div>
-
+ 
     <div id="tab-inventario" class="tab-content">
-      <div class="formula-block">
-<span class="comment">// Balance de inventario mes a mes</span>
-
-<span class="highlight">I₁</span> = (x₁₁ + x₂₁) - 500
-     <span class="comment">// Lo comprado en junio menos la demanda de junio</span>
-     <span class="comment">// I₁ ≥ 0  →  x₁₁ + x₂₁ ≥ 500</span>
-
-<span class="highlight">I₂</span> = I₁ + (x₁₂ + x₂₂) - 600
-     <span class="comment">// Inventario inicial + compras julio - demanda julio</span>
-     <span class="comment">// I₂ ≥ 0</span>
-
-<span class="highlight">0</span>  = I₂ + (x₁₃ + x₂₃) - 400
-     <span class="comment">// Todo se consume en agosto (sin inventario final)</span>
-
-<span class="comment">// Costo refrigeración = $5 × inventario PROMEDIO mensual</span>
-Costo_ref_julio  = 5 × (I₁/2 + I₁/2) = 5 × I₁
-Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
+      <div style="font-size:0.88rem;line-height:1.9;color:#333;">
+        <p style="margin-bottom:1rem;">El inventario de cada mes resulta de lo comprado más lo que quedó del mes anterior, menos la demanda del mes:</p>
+ 
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Junio</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₁ = (x₁₁ + x₂₁) − 500 &nbsp;≥ 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Lo comprado en junio menos la demanda de junio. Si es positivo, queda inventario refrigerado.</div>
+          </div>
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Julio</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₂ = I₁ + (x₁₂ + x₂₂) − 600 &nbsp;≥ 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Inventario arrastrado de junio, más lo comprado en julio, menos la demanda de julio.</div>
+          </div>
+          <div style="background:var(--vanilla);border-radius:8px;padding:0.85rem 1.25rem;">
+            <div style="font-weight:700;color:var(--chocolate);margin-bottom:0.2rem;">Balance Agosto</div>
+            <div style="font-family:'IBM Plex Mono',monospace;">I₂ + (x₁₃ + x₂₃) − 400 = 0</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:0.2rem;">Todo el inventario se consume al final del verano; no se permite stock residual.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
+ 
   <!-- SOLUCIÓN ÓPTIMA -->
   <div class="section-title"><span>✅</span> Solución Óptima</div>
-
+ 
   <div class="card">
     <div style="font-size:0.8rem;color:#888;margin-bottom:1rem;">
       Obtenida mediante el Método Simplex (equivalente a Solver/TORA). Análisis de costos marginales determina el programa de compra más económico.
     </div>
-
+ 
     <table class="sol-table">
       <thead>
         <tr>
@@ -486,7 +505,7 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
     </table>
     <p style="font-size:0.72rem;color:#888;margin-top:0.4rem;">Balance: Junio compra 500 = demanda → I₁=0. Julio compra 800, cubre demanda 600 → I₂=200. Agosto: 200 inv. + 200 compra = 400 demanda ✓</p>
   </div>
-
+ 
   <!-- INVENTARIO Y COSTO TOTAL -->
   <div class="card-grid">
     <div class="card">
@@ -523,7 +542,7 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
         </div>
       </div>
     </div>
-
+ 
     <div class="card" style="display:flex;flex-direction:column;gap:1rem;">
       <div style="font-weight:600;color:var(--chocolate);">💰 Desglose del Costo Total</div>
       <div class="cost-bar-wrap">
@@ -544,7 +563,7 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
       </div>
     </div>
   </div>
-
+ 
   <!-- COSTO TOTAL -->
   <div class="total-cost">
     <div>
@@ -554,11 +573,11 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
     </div>
     <div class="emoji">🍦</div>
   </div>
-
+ 
   <!-- ANÁLISIS DE LA SOLUCIÓN -->
   <hr class="divider">
   <div class="section-title"><span>🔍</span> Análisis e Interpretación</div>
-
+ 
   <div class="card">
     <div style="font-weight:600;color:var(--chocolate);margin-bottom:1rem;">¿Por qué esta solución es óptima?</div>
     <div style="font-size:0.88rem;line-height:1.9;color:#333;">
@@ -576,7 +595,7 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
       </p>
     </div>
   </div>
-
+ 
   <!-- VERIFICACIÓN -->
   <div class="card" style="border-left:4px solid var(--mint);">
     <div style="font-weight:600;color:var(--mint);margin-bottom:0.75rem;">✓ Verificación de Restricciones</div>
@@ -598,9 +617,9 @@ Costo_ref_agosto = 5 × (I₂/2 + I₂/2) = 5 × I₂
       <tr><td style="padding:0.35rem 0.75rem;">Total comprado = 1500</td><td style="text-align:center;">1500</td><td style="text-align:center;">1500</td><td style="text-align:center;color:var(--caramel);">⚡ Exacta</td></tr>
     </table>
   </div>
-
+ 
 </main>
-
+ 
 <script>
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -608,7 +627,7 @@ function showTab(id) {
   document.getElementById('tab-' + id).classList.add('active');
   event.target.classList.add('active');
 }
-
+ 
 // Animate bars on load
 setTimeout(() => {
   document.querySelectorAll('.cost-bar-fill').forEach(bar => {
